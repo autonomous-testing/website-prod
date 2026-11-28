@@ -15,13 +15,13 @@ const STEPS: [string, string][] = [
   ["Shows you the plan", "Lists what will change and waits for your yes. Your agent's own permission prompts stay on."],
   ["Runs one command", "npx -y @wopee-io/init prints a link and three pairing words. New users sign up with their app's URL first and get a free first crawl."],
   ["You approve in Commander", "Check that the words match, pick the project and approve. A new, named API key goes straight to the command, encrypted. Your agent never sees it."],
-  ["Checks the connection", "After a restart, one read-only call reports your project, analyses and tests."],
+  ["Checks the connection", "After a restart (Claude Code also signs in once in your browser), read-only calls report your project, analyses and tests."],
   ["Offers a first run", "It asks before it starts a test run or an analysis, because runs count toward your plan."],
 ];
 
 const CHANGES = [
   "WOPEE_API_KEY and WOPEE_PROJECT_UUID in a .env file, written by the command, and .env in .gitignore",
-  "One MCP server entry named wopee, with no key in it (.mcp.json, .cursor/mcp.json, .vscode/mcp.json, opencode.json or ~/.codex/config.toml)",
+  "One MCP server entry named wopee, with no key in it (.mcp.json, .cursor/mcp.json, .vscode/mcp.json, opencode.json or ~/.codex/config.toml). Claude Code gets the hosted server and signs in through your browser, where you pick the project and Read only or Read and write",
   "A new key in Commander named wopee-init · <agent> · <machine> · <date>, which you can revoke at any time",
 ];
 
@@ -30,7 +30,7 @@ const NEVER = [
   "Uses sudo, global installs, curl | bash or edits your shell profile",
   "Turns off TLS or certificate checks",
   "Starts a test run or an analysis without your yes",
-  "Visits hosts other than wopee.io, docs.wopee.io, cmd.wopee.io, api.wopee.io and npm",
+  "Visits hosts other than wopee.io, docs.wopee.io, cmd.wopee.io, api.wopee.io, mcp.wopee.io and npm",
 ];
 
 const FALLBACKS: [string, string, string][] = [
