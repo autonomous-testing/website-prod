@@ -12,12 +12,13 @@ import {
   mdiMagnifyScan,
   mdiBugOutline,
   mdiHistory,
-  mdiMessageTextOutline,
-  mdiForumOutline,
   mdiContentCopy,
   mdiCheck,
   mdiVariable,
   mdiTune,
+  mdiCheckCircleOutline,
+  mdiBookSearchOutline,
+  mdiConsole,
 } from "@mdi/js";
 import Icon from "@mdi/react";
 import React, { useState, useEffect } from "react";
@@ -133,18 +134,18 @@ const CAPABILITIES = [
       "The complete picture: every authored test case joined with its latest execution status, including never-run ones.",
   },
   {
-    icon: mdiMessageTextOutline,
-    title: "Post to Project Chat",
-    tool: "wopee_send_chat_message",
+    icon: mdiCheckCircleOutline,
+    title: "Check the Setup",
+    tool: "wopee_setup_check",
     description:
-      "Post status updates and notes to your project's chat room so the whole team sees what the agent is doing.",
+      "Confirm the connection works: the project, its app URL, your plan and the steps left, with a link to Commander.",
   },
   {
-    icon: mdiForumOutline,
-    title: "Read Chat History",
-    tool: "wopee_read_chat_history",
+    icon: mdiBookSearchOutline,
+    title: "Search the Docs",
+    tool: "wopee_search_docs",
     description:
-      "Pull recent messages from your project's chat room for context before the agent acts.",
+      "Answer setup and configuration questions from docs.wopee.io, with a link to the page each answer comes from.",
   },
 ];
 
@@ -184,6 +185,11 @@ const COMPATIBLE_TOOLS = [
     icon: <SiOpenai size={26} aria-hidden="true" />,
   },
   {
+    name: "OpenCode",
+    description: "Terminal coding agent",
+    icon: <Icon path={mdiConsole} size={1.1} aria-hidden="true" />,
+  },
+  {
     name: "Devin Desktop",
     description: "Formerly Windsurf",
     icon: <Icon path={mdiApplicationOutline} size={1.1} aria-hidden="true" />,
@@ -212,7 +218,7 @@ const STEPS = [
     label: "terminal",
     code: "npx -y @wopee-io/init@latest\n\n  words      brave-otter-42\n  approved   in Commander\n  wrote      .env, .mcp.json",
     description:
-      "Your agent runs npx -y @wopee-io/init and shows you a link and three words. Check that Commander shows the same words, pick the project and approve. A new key goes straight to a git-ignored .env, and the wopee server entry holds none. No pairing on your instance? Run init --manual yourself. In CI, set WOPEE_API_KEY and WOPEE_PROJECT_UUID as secrets.",
+      "Your agent runs npx -y @wopee-io/init and shows you a link and three words. Check that Commander shows the same words, pick the project and approve. A new key goes straight to a git-ignored .env, and the wopee server entry holds none. Claude Code gets the hosted server and then signs in once in your browser, Read only or Read and write. No pairing on your instance? Run init --manual yourself. In CI, set WOPEE_API_KEY and WOPEE_PROJECT_UUID as secrets.",
   },
   {
     step: "3",
@@ -349,14 +355,14 @@ const CopyBlock = ({
 const InstallSnippet = () => (
   <div id="mcp-config" className="w-full mt-5 flex flex-col gap-4">
     <CopyBlock
-      label="Claude Code, remote server"
+      label="Claude Code, hosted server"
       text={REMOTE_MCP_COMMAND}
       note="No key stored anywhere: Claude Code signs in through your browser, where you pick the project and whether it may change anything. Disconnect it any time in the project's settings."
     />
     <CopyBlock
       label="mcp-config.json"
       text={MCP_CONFIG_SNIPPET}
-      note="Any agent, local server. No key in the config: the server reads WOPEE_API_KEY and WOPEE_PROJECT_UUID from your repository's git-ignored .env."
+      note="Any agent, local server from npm. No key in the config: the server reads WOPEE_API_KEY and WOPEE_PROJECT_UUID from your repository's git-ignored .env."
     />
   </div>
 );
@@ -369,7 +375,7 @@ const HeroSection = () => {
         <div className="flex justify-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-solid border-gray-900/10 bg-gray-900/5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:border-primary-wopee/20 dark:bg-primary-wopee/10 dark:text-primary-wopee">
             <span className="h-1.5 w-1.5 rounded-full bg-gray-900 dark:bg-primary-wopee" aria-hidden="true" />
-            MCP Server · open source on npm
+            MCP Server · hosted or open source on npm
           </span>
         </div>
 
@@ -420,11 +426,11 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-wrap justify-center gap-3 text-sm opacity-60">
-          <span>npm package</span>
+          <span>Hosted at mcp.wopee.io or npm package</span>
           <span>&#x2022;</span>
           <span>15 MCP tools</span>
           <span>&#x2022;</span>
-          <span>Node.js 20.18+</span>
+          <span>3 prompts</span>
         </div>
       </div>
 
@@ -505,8 +511,9 @@ const CapabilitiesSection = () => (
         Complete testing workflow
       </h2>
       <p className="text-xl opacity-70 max-w-2xl mx-auto">
-        From crawling your app to filing GitHub issues, 15 tools, all through
-        conversation
+        From crawling your app to filing GitHub issues: 15 tools and 3 prompts,
+        all through conversation. A Read only connection gets the 8 tools that
+        read.
       </p>
     </div>
 
@@ -545,10 +552,10 @@ const HowItWorksSection = () => (
   <div id="how-it-works" className="container my-16 lg:my-24 px-5 lg:px-10">
     <div className="text-center mb-12 lg:mb-16">
       <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-        Up and running in 3 minutes
+        Up and running with one prompt
       </h2>
       <p className="text-xl opacity-70 max-w-2xl mx-auto">
-        Paste one line, approve in Commander, and start testing
+        Paste one line, approve in Commander, and test from your agent
       </p>
     </div>
 
@@ -684,11 +691,11 @@ const TOOL_GROUPS = [
     ],
   },
   {
-    label: "Collaborate & report",
+    label: "Report & check",
     tools: [
       ["wopee_create_github_issue", "File bugs on GitHub"],
-      ["wopee_send_chat_message", "Post to project chat"],
-      ["wopee_read_chat_history", "Read chat history"],
+      ["wopee_setup_check", "Check the connection"],
+      ["wopee_search_docs", "Search the docs"],
     ],
   },
 ];
@@ -713,8 +720,9 @@ const OpenSourceSection = () => (
         </h2>
         <p className="text-lg opacity-70 mb-6 text-balance">
           The Wopee.io MCP server is published on npm and the source code is
-          available on GitHub. Install in seconds, inspect the code, and
-          contribute if you'd like.
+          available on GitHub. Run it locally with npx, inspect the code, and
+          contribute if you'd like. Claude Code can use the same server hosted
+          at mcp.wopee.io instead, with no install and no key in any file.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
@@ -796,7 +804,7 @@ const JSONLD_MCP_APP = {
   operatingSystem: "Cross-platform (Node.js 20.18+)",
   url: "https://wopee.io/mcp/",
   description:
-    "Model Context Protocol server that connects Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Devin Desktop (formerly Windsurf), Claude Desktop, and other MCP clients to Wopee.io. Dispatch autonomous testing agents, generate test artifacts, fetch execution results, and manage test suites from natural-language conversation.",
+    "Model Context Protocol server that connects Claude Code, Cursor, GitHub Copilot, OpenAI Codex, OpenCode, Devin Desktop (formerly Windsurf), Claude Desktop, and other MCP clients to Wopee.io. Hosted at https://mcp.wopee.io/mcp with OAuth sign-in, or run locally from npm. Dispatch autonomous testing agents, generate test artifacts, fetch execution results, and manage test suites from natural-language conversation.",
   softwareRequirements: "Node.js 20.18+",
   downloadUrl: "https://www.npmjs.com/package/wopee-mcp",
   installUrl: "https://www.npmjs.com/package/wopee-mcp",
@@ -816,7 +824,7 @@ const JSONLD_MCP_SOURCE = {
   "@type": "SoftwareSourceCode",
   name: "wopee-mcp",
   description:
-    "Wopee.io's Model Context Protocol server for agentic testing. Compatible with Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Devin Desktop, Claude Desktop, and any MCP client.",
+    "Wopee.io's Model Context Protocol server for agentic testing. Compatible with Claude Code, Cursor, GitHub Copilot, OpenAI Codex, OpenCode, Devin Desktop, Claude Desktop, and any MCP client.",
   codeRepository: "https://github.com/Wopee-io/wopee-mcp",
   programmingLanguage: "TypeScript",
   runtimePlatform: "Node.js",
@@ -842,12 +850,13 @@ const McpPage = () => {
       <HeroSection />
       <AnswerFirst
         question="Is there an MCP server for testing web apps?"
-        lastChecked="9 November 2026"
+        lastChecked="28 November 2026"
         className="pb-12"
       >
-        Yes. Wopee.io's MCP server, wopee-mcp on npm, connects Claude Code,
-        Cursor, GitHub Copilot, OpenAI Codex, Devin Desktop or any other MCP
-        client to Wopee.io's AI testing agents. From the
+        Yes. Wopee.io's MCP server connects Claude Code, Cursor, GitHub
+        Copilot, OpenAI Codex, OpenCode, Devin Desktop or any other MCP client
+        to Wopee.io's AI testing agents. Use it hosted at mcp.wopee.io, where
+        you sign in through the browser, or run wopee-mcp from npm. From the
         chat, your coding agent can generate tests, start test runs against
         your web app, fetch the results and file GitHub issues. It is for
         testing your web app through MCP, not for testing an MCP server.
@@ -867,7 +876,7 @@ const McpPage = () => {
               Bring autonomous testing to your AI workflow
             </h2>
             <p className="m-0 text-2xl text-gray-900 lg:text-3xl">
-              Set up in minutes, start testing immediately.
+              Paste one line, approve, and test from your agent.
             </p>
           </div>
           <div className="flex flex-col items-center justify-center gap-2 sm:flex-row lg:gap-5">

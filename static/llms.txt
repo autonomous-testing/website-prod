@@ -11,7 +11,7 @@
 - [AI Testing Agents](https://wopee.io/ai-testing-agents/): How the autonomous agents explore, generate, run, and maintain tests without manual scripting.
 - [Visual testing](https://wopee.io/visual-testing/): AI visual regression testing with native SDKs for Playwright, Cypress, WebdriverIO and Robot Framework; Selenium WebDriver, Appium, Puppeteer and any other framework that takes screenshots connect through the API.
 - [Integrations](https://wopee.io/integrations/): MCP clients (Claude Code, GitHub Copilot, Cursor, OpenAI Codex, Gemini CLI, Devin Desktop), Slack and Teams, GitHub and GitHub Actions, test frameworks, and the GraphQL API.
-- [MCP Server](https://wopee.io/mcp/): Wopee.io's Model Context Protocol server, connect Claude Code, GitHub Copilot, Cursor, OpenAI Codex, or any MCP client and dispatch testing agents from natural-language conversation.
+- [MCP Server](https://wopee.io/mcp/): Wopee.io's Model Context Protocol server, hosted at https://mcp.wopee.io/mcp (OAuth sign-in, no key in any file) or run locally from npm as wopee-mcp. Connect Claude Code, GitHub Copilot, Cursor, OpenAI Codex, OpenCode, or any MCP client and dispatch testing agents from natural-language conversation.
 - [About](https://wopee.io/about-us/): Team, mission, investors, and contact (help@wopee.io, wopee labs s.r.o., Prague).
 - [Book a demo](https://wopee.io/book-demo/): 30-minute call with the founders.
 - [Brand kit](https://wopee.io/brand/): Logo, symbol, colours, type and usage rules, with downloads.
